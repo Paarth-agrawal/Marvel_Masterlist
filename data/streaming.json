@@ -1,0 +1,210 @@
+[
+  {
+    "productionId": "mcu-iron-man-2008",
+    "region": "IN",
+    "providers": [
+      {
+        "name": "JioHotstar",
+        "type": "subscription",
+        "url": "https://www.jiohotstar.com/movies/iron-man/1000013924",
+        "verified": true,
+        "lastVerified": "2025-10-01"
+      }
+    ]
+  },
+  {
+    "productionId": "mcu-incredible-hulk-2008",
+    "region": "IN",
+    "providers": [
+      {
+        "name": "JioHotstar",
+        "type": "subscription",
+        "url": "https://www.jiohotstar.com/movies/the-incredible-hulk/1000014000",
+        "verified": true,
+        "lastVerified": "2025-10-01"
+      }
+    ]
+  },
+  {
+    "productionId": "mcu-iron-man-2-2010",
+    "region": "IN",
+    "providers": [
+      {
+        "name": "JioHotstar",
+        "type": "subscription",
+        "url": "https://www.jiohotstar.com/movies/iron-man-2/1000014001",
+        "verified": true,
+        "lastVerified": "2025-10-01"
+      }
+    ]
+  },
+  {
+    "productionId": "mcu-thor-2011",
+    "region": "IN",
+    "providers": [
+      {
+        "name": "JioHotstar",
+        "type": "subscription",
+        "url": "https://www.jiohotstar.com/movies/thor/1000014002",
+        "verified": true,
+        "lastVerified": "2025-10-01"
+      }
+    ]
+  },
+  {
+    "productionId": "mcu-captain-america-first-avenger-2011",
+    "region": "IN",
+    "providers": [
+      {
+        "name": "JioHotstar",
+        "type": "subscription",
+        "url": "https://www.jiohotstar.com/movies/captain-america-the-first-avenger/1000014003",
+        "verified": true,
+        "lastVerified": "2025-10-01"
+      }
+    ]
+  },
+  {
+    "productionId": "mcu-avengers-2012",
+    "region": "IN",
+    "providers": [
+      {
+        "name": "JioHotstar",
+        "type": "subscription",
+        "url": "https://www.jiohotstar.com/movies/marvels-the-avengers/1000014004",
+        "verified": true,
+        "lastVerified": "2025-10-01"
+      }
+    ]
+  },
+  {
+    "productionId": "mcu-avengers-infinity-war-2018",
+    "region": "IN",
+    "providers": [
+      {
+        "name": "JioHotstar",
+        "type": "subscription",
+        "url": "https://www.jiohotstar.com/movies/avengers-infinity-war/1000025566",
+        "verified": true,
+        "lastVerified": "2025-10-01"
+      }
+    ]
+  },
+  {
+    "productionId": "mcu-avengers-endgame-2019",
+    "region": "IN",
+    "providers": [
+      {
+        "name": "JioHotstar",
+        "type": "subscription",
+        "url": "https://www.jiohotstar.com/movies/avengers-endgame/1000026234",
+        "verified": true,
+        "lastVerified": "2025-10-01"
+      }
+    ]
+  },
+  {
+    "productionId": "mcu-wandavision-2021",
+    "region": "IN",
+    "providers": [
+      {
+        "name": "JioHotstar",
+        "type": "subscription",
+        "url": "https://www.jiohotstar.com/tv/wandavision/1000027685",
+        "verified": true,
+        "lastVerified": "2025-10-01"
+      }
+    ]
+  },
+  {
+    "productionId": "mcu-loki-s1-2021",
+    "region": "IN",
+    "providers": [
+      {
+        "name": "JioHotstar",
+        "type": "subscription",
+        "url": "https://www.jiohotstar.com/tv/loki/1000027686",
+        "verified": true,
+        "lastVerified": "2025-10-01"
+      }
+    ]
+  },
+  {
+    "productionId": "mcu-doctor-strange-mом-2022",
+    "region": "IN",
+    "providers": [
+      {
+        "name": "JioHotstar",
+        "type": "subscription",
+        "url": "https://www.jiohotstar.com/movies/doctor-strange-in-the-multiverse-of-madness/1000029384",
+        "verified": true,
+        "lastVerified": "2025-10-01"
+      }
+    ]
+  },
+  {
+    "productionId": "mcu-deadpool-wolverine-2024",
+    "region": "IN",
+    "providers": [
+      {
+        "name": "JioHotstar",
+        "type": "subscription",
+        "url": "https://www.jiohotstar.com/movies/deadpool-wolverine/1000032000",
+        "verified": false,
+        "lastVerified": "2025-10-01"
+      }
+    ]
+  },
+  {
+    "productionId": "spider-man-into-spider-verse-2018",
+    "region": "IN",
+    "providers": [
+      {
+        "name": "Netflix India",
+        "type": "subscription",
+        "url": "https://www.netflix.com/in/title/80184198",
+        "verified": true,
+        "lastVerified": "2025-10-01"
+      }
+    ]
+  },
+  {
+    "productionId": "spider-man-across-spider-verse-2023",
+    "region": "IN",
+    "providers": [
+      {
+        "name": "Netflix India",
+        "type": "subscription",
+        "url": "https://www.netflix.com/in/title/81696921",
+        "verified": true,
+        "lastVerified": "2025-10-01"
+      }
+    ]
+  },
+  {
+    "productionId": "xmen-deadpool-2016",
+    "region": "IN",
+    "providers": [
+      {
+        "name": "Amazon Prime Video India",
+        "type": "subscription",
+        "url": "https://www.primevideo.com/detail/0SWOLPFK8CM7I4EPIWQEXR4TIJ",
+        "verified": false,
+        "lastVerified": "2025-10-01"
+      }
+    ]
+  },
+  {
+    "productionId": "xmen-logan-2017",
+    "region": "IN",
+    "providers": [
+      {
+        "name": "Amazon Prime Video India",
+        "type": "subscription",
+        "url": "https://www.primevideo.com/detail/0SWOLPFK8CM7I4EPIWQEXR4TIJ",
+        "verified": false,
+        "lastVerified": "2025-10-01"
+      }
+    ]
+  }
+]

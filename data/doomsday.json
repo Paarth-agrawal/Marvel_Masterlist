@@ -1,0 +1,138 @@
+{
+  "filmInfo": {
+    "title": "Avengers: Doomsday",
+    "releaseDate": "2026-12-18",
+    "directors": ["Anthony Russo", "Joe Russo"],
+    "villain": "Doctor Doom",
+    "villainActor": "Robert Downey Jr.",
+    "confirmedRuntime": 165,
+    "runtimeVerified": false,
+    "sources": [
+      "Marvel Studios official cast announcement (March 2025)",
+      "CinemaCon 2026 trailer reveal"
+    ],
+    "disclosureBanner": "Recommendations are editorial judgments based on confirmed cast, released content, and storyline connections. Plot details for Doomsday have not been officially revealed. Speculation is clearly labeled."
+  },
+  "confirmedCast": [
+    { "actor": "Robert Downey Jr.", "role": "Doctor Doom", "confirmed": true },
+    { "actor": "Patrick Stewart", "role": "Professor X", "confirmed": true },
+    { "actor": "Ian McKellen", "role": "Magneto", "confirmed": true },
+    { "actor": "James Marsden", "role": "Cyclops", "confirmed": true },
+    { "actor": "Rebecca Romijn", "role": "Mystique", "confirmed": true },
+    { "actor": "Alan Cumming", "role": "Nightcrawler", "confirmed": true },
+    { "actor": "Channing Tatum", "role": "Gambit", "confirmed": true }
+  ],
+  "unconfirmedCast": [
+    { "actor": "Chris Evans", "role": "Unknown", "confirmed": false, "note": "Reported but not officially confirmed as of last verification" }
+  ],
+  "recommendations": [
+    {
+      "productionId": "mcu-avengers-infinity-war-2018",
+      "category": "essential",
+      "reason": "Establishes Avengers team dynamics and the Infinity Saga's stakes. Essential for understanding what the Avengers are fighting to protect.",
+      "status": "editorial"
+    },
+    {
+      "productionId": "mcu-avengers-endgame-2019",
+      "category": "essential",
+      "reason": "The aftermath of the Infinity Saga reshapes the entire roster. Doomsday directly builds on who survived and who was lost here.",
+      "status": "editorial"
+    },
+    {
+      "productionId": "mcu-loki-s1-2021",
+      "category": "essential",
+      "reason": "Introduces the TVA and multiverse mechanics critical for understanding why characters from different universes can coexist in Doomsday.",
+      "status": "editorial"
+    },
+    {
+      "productionId": "mcu-loki-s2-2023",
+      "category": "essential",
+      "reason": "Directly continues the multiverse setup. Loki's sacrifice restructures the timeline branches that Doomsday likely exploits.",
+      "status": "editorial"
+    },
+    {
+      "productionId": "mcu-doctor-strange-mом-2022",
+      "category": "essential",
+      "reason": "Establishes multiverse mechanics, Incursions, and introduces the concept of alternate Earth variants — all directly relevant to Doctor Doom.",
+      "status": "editorial"
+    },
+    {
+      "productionId": "mcu-captain-america-brave-new-world-2025",
+      "category": "essential",
+      "reason": "Leads directly into the Avengers team formation for Doomsday. Sam Wilson's arc as Captain America is central.",
+      "status": "editorial"
+    },
+    {
+      "productionId": "mcu-thunderbolts-2025",
+      "category": "essential",
+      "reason": "Team introduced here likely folds into the Doomsday roster. Confirmed to connect directly.",
+      "status": "editorial"
+    },
+    {
+      "productionId": "xmen-x-men-2000",
+      "category": "recommended",
+      "reason": "Introduces Professor X and Magneto — both confirmed in Doomsday's cast. Essential character grounding for their relationship.",
+      "status": "editorial"
+    },
+    {
+      "productionId": "xmen-x2-2003",
+      "category": "recommended",
+      "reason": "Deepens X-Men relationships, particularly between Professor X, Magneto, and Nightcrawler. All three are confirmed in Doomsday.",
+      "status": "editorial"
+    },
+    {
+      "productionId": "xmen-days-future-past-2014",
+      "category": "recommended",
+      "reason": "Most important X-Men film for multiversal context. Involves timeline manipulation that foreshadows Doomsday's multiverse premise.",
+      "status": "editorial"
+    },
+    {
+      "productionId": "xmen-logan-2017",
+      "category": "recommended",
+      "reason": "Final Fox Wolverine arc. Provides emotional closure for that version of the character relevant after Deadpool & Wolverine.",
+      "status": "editorial"
+    },
+    {
+      "productionId": "mcu-deadpool-wolverine-2024",
+      "category": "recommended",
+      "reason": "Directly bridges the Fox X-Men universe to the MCU. Confirms how these characters can appear alongside MCU Avengers in Doomsday.",
+      "status": "editorial"
+    },
+    {
+      "productionId": "mcu-black-panther-2018",
+      "category": "optional",
+      "reason": "Introduces Wakanda and Vibranium — both relevant to Avengers operations. Character context for Shuri.",
+      "status": "editorial"
+    },
+    {
+      "productionId": "mcu-black-panther-wakanda-forever-2022",
+      "category": "optional",
+      "reason": "Shuri's arc as Black Panther and Vibranium's role in the post-Endgame world.",
+      "status": "editorial"
+    },
+    {
+      "productionId": "mcu-falcon-winter-soldier-2021",
+      "category": "optional",
+      "reason": "Sam Wilson takes on the Captain America mantle. Provides character context for his role in Brave New World and Doomsday.",
+      "status": "editorial"
+    },
+    {
+      "productionId": "mcu-secret-invasion-2023",
+      "category": "optional",
+      "reason": "Nick Fury's arc and the geopolitical landscape relevant to Doomsday's setup.",
+      "status": "editorial"
+    },
+    {
+      "productionId": "mcu-what-if-s1-2021",
+      "category": "multiverse-context",
+      "reason": "Animated. Shows multiverse variants of major heroes. Helpful for understanding the broader multiverse concept Doomsday uses.",
+      "status": "editorial"
+    },
+    {
+      "productionId": "mcu-doctor-strange-2016",
+      "category": "multiverse-context",
+      "reason": "Establishes Doctor Strange as Sorcerer Supreme and introduces the mystic arts framework underlying multiverse mechanics.",
+      "status": "editorial"
+    }
+  ]
+}

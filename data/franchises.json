@@ -1,0 +1,38 @@
+[
+  {
+    "id": "mcu",
+    "label": "MCU",
+    "description": "Marvel Cinematic Universe — officially confirmed MCU productions",
+    "includes": ["theatrical", "disney+", "animated-mcu", "specials", "one-shots"]
+  },
+  {
+    "id": "x-men",
+    "label": "X-Men Universe",
+    "description": "Fox/Marvel X-Men films, Wolverine films, Deadpool films (pre-MCU)",
+    "includes": []
+  },
+  {
+    "id": "spider-man",
+    "label": "Spider-Man Franchises",
+    "description": "Raimi trilogy, Amazing Spider-Man, Sony Spider-Verse, animated",
+    "includes": []
+  },
+  {
+    "id": "legacy",
+    "label": "Legacy Marvel",
+    "description": "Pre-MCU theatrical Marvel: Blade, Fantastic Four, Ghost Rider, etc.",
+    "includes": []
+  },
+  {
+    "id": "tv",
+    "label": "Marvel Television",
+    "description": "Netflix Defenders-verse, ABC/Freeform/Hulu Marvel TV",
+    "includes": []
+  },
+  {
+    "id": "animation",
+    "label": "Marvel Animation",
+    "description": "Animated series and films outside MCU and Sony Spider-Verse",
+    "includes": []
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "id": "mcu-avengers-doomsday-2026",
+    "title": "Avengers: Doomsday",
+    "releaseDate": "2026-12-18",
+    "releaseDateVerified": true,
+    "tier": "mcu",
+    "contentType": "movie",
+    "synopsis": "Earth's mightiest heroes face Doctor Doom in a multiversal threat.",
+    "announcedAt": "D23 2024"
+  },
+  {
+    "id": "spider-man-beyond-spider-verse-tba",
+    "title": "Spider-Man: Beyond the Spider-Verse",
+    "releaseDate": null,
+    "releaseDateVerified": false,
+    "tier": "spider-man",
+    "contentType": "movie",
+    "synopsis": "The conclusion to the Spider-Verse animated trilogy.",
+    "announcedAt": "Sony 2022"
+  }
+]
