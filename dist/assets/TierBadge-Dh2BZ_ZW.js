@@ -1,0 +1,1 @@
+import"./rolldown-runtime-WkwZ5CU-.js";import{K as e,t}from"./vendor-DuqD9eZg.js";e();var n=t(),r={mcu:`MCU`,"x-men":`X-Men`,"spider-man":`Spider-Man`,legacy:`Legacy`,sony:`Sony`,tv:`Television`,television:`Television`,animation:`Animation`},i=({tier:e,className:t=``})=>(0,n.jsx)(`span`,{className:`tier-badge tier-badge-${e} ${t}`,children:r[e]});export{i as t};

@@ -44,9 +44,12 @@ export default function Timeline() {
     }
   }, [franchiseParam, filters.franchises, updateFilter]);
 
+  const activePreset = progress.preferences.activePreset;
+  const effectiveMode = activePreset === 'complete-marvel' ? 'release' : progress.preferences.orderMode;
+
   const sortedPreset = useMemo(
-    () => sortProductionsByMode(presetFiltered, progress.preferences.orderMode),
-    [presetFiltered, progress.preferences.orderMode]
+    () => sortProductionsByMode(presetFiltered, effectiveMode),
+    [presetFiltered, effectiveMode]
   );
 
   const nextToWatch = useMemo(
@@ -112,7 +115,7 @@ export default function Timeline() {
           All Marvel screen content in original release order
           {' '}·{' '}
           <strong style={{ color: 'var(--accent-gold)' }}>
-            {progress.preferences.orderMode === 'release' ? 'Release Order' : 'MCU Story Order'}
+            {progress.preferences.orderMode === 'release' || activePreset === 'complete-marvel' ? 'Release Order' : 'MCU Story Order'}
           </strong>
         </p>
       </div>

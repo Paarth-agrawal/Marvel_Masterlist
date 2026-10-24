@@ -264,12 +264,14 @@ a:hover { color: var(--text-primary); }
   white-space: nowrap;
 }
 
-.tier-badge-mcu       { background: rgba(192,25,44,0.22); color: #ff5264; border: 1px solid rgba(192,25,44,0.45); }
-.tier-badge-x-men     { background: rgba(124,58,237,0.22); color: #c4b5fd; border: 1px solid rgba(124,58,237,0.45); }
-.tier-badge-spider-man{ background: rgba(29,78,216,0.22); color: #93c5fd; border: 1px solid rgba(29,78,216,0.45); }
-.tier-badge-legacy    { background: rgba(71,85,105,0.25); color: #cbd5e1; border: 1px solid rgba(71,85,105,0.45); }
-.tier-badge-tv        { background: rgba(194,65,12,0.22); color: #fdba74; border: 1px solid rgba(194,65,12,0.45); }
-.tier-badge-animation { background: rgba(13,148,136,0.22); color: #5eead4; border: 1px solid rgba(13,148,136,0.45); }
+.tier-badge-mcu        { background: rgba(192,25,44,0.22); color: #ff5264; border: 1px solid rgba(192,25,44,0.45); }
+.tier-badge-x-men      { background: rgba(124,58,237,0.22); color: #c4b5fd; border: 1px solid rgba(124,58,237,0.45); }
+.tier-badge-spider-man { background: rgba(29,78,216,0.22); color: #93c5fd; border: 1px solid rgba(29,78,216,0.45); }
+.tier-badge-legacy     { background: rgba(71,85,105,0.25); color: #cbd5e1; border: 1px solid rgba(71,85,105,0.45); }
+.tier-badge-sony       { background: rgba(37,99,235,0.22); color: #60a5fa; border: 1px solid rgba(37,99,235,0.45); }
+.tier-badge-tv,
+.tier-badge-television { background: rgba(194,65,12,0.22); color: #fdba74; border: 1px solid rgba(194,65,12,0.45); }
+.tier-badge-animation  { background: rgba(13,148,136,0.22); color: #5eead4; border: 1px solid rgba(13,148,136,0.45); }
 
 /* ── Cards ──────────────────────────────────────────────── */
 .card {
@@ -1693,6 +1695,84 @@ a:hover { color: var(--text-primary); }
   color: rgba(255, 59, 83, 0.5);
   user-select: none;
 }
+
+/* ── Doomsday Recommendation Cards & Distinct Headers ────── */
+.doomsday-top-disclaimer {
+  background: rgba(18, 18, 28, 0.95);
+  border: 1px solid rgba(201, 168, 76, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 1.1rem 1.35rem;
+  margin-bottom: 2rem;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.doomsday-official-banner {
+  background: linear-gradient(90deg, rgba(201, 168, 76, 0.16) 0%, rgba(20, 20, 32, 0.7) 100%);
+  border: 1px solid rgba(201, 168, 76, 0.45);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1.25rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--accent-gold);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.doomsday-header-official {
+  border-left: 4px solid var(--accent-gold) !important;
+  padding-left: 0.85rem;
+  font-size: 1.4rem;
+  color: #ffffff;
+}
+
+.doomsday-header-recommended {
+  border-left: 4px solid #c0c0c0 !important;
+  padding-left: 0.85rem;
+  font-size: 1.4rem;
+  color: #ffffff;
+}
+
+.doomsday-header-optional {
+  border-left: 4px solid #6b7280 !important;
+  padding-left: 0.85rem;
+  font-size: 1.4rem;
+  color: #ffffff;
+}
+
+.doomsday-rec-card {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 1.25rem;
+  align-items: stretch;
+  padding: 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  min-height: 140px;
+}
+
+.doomsday-rec-card:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+}
+
+.doomsday-rec-poster-box {
+  width: 80px;
+  height: 120px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--bg-elevated);
+  flex-shrink: 0;
+}
+
 
 /* ============================================================
    Micro-Interactions: Green Flash & Milestone Toast

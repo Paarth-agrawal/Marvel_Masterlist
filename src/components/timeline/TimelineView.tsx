@@ -23,7 +23,8 @@ const TIERS: { id: Tier; label: string }[] = [
   { id: 'x-men',      label: 'X-Men' },
   { id: 'spider-man', label: 'Spider-Man' },
   { id: 'legacy',     label: 'Legacy' },
-  { id: 'tv',         label: 'TV' },
+  { id: 'sony',       label: 'Sony' },
+  { id: 'tv',         label: 'Television' },
   { id: 'animation',  label: 'Animation' },
 ];
 
@@ -64,7 +65,7 @@ export function TimelineView({
   return (
     <div>
       {/* Order mode banner */}
-      {orderMode === 'chronology' && (
+      {orderMode === 'chronology' && activePreset !== 'complete-marvel' && (
         <div className="mode-banner">
           ⚠ Story chronological order — this is not the original release order.
           <button className="btn btn-ghost btn-sm" onClick={() => setOrderMode('release')} style={{ marginLeft: 'auto' }}>
@@ -104,23 +105,35 @@ export function TimelineView({
         </div>
 
         {/* Order mode toggle */}
-        <div style={{ display: 'flex', gap: '0.35rem', flexShrink: 0 }}>
-          <button
-            className={`pill ${orderMode === 'release' ? 'active' : ''}`}
-            onClick={() => setOrderMode('release')}
-            id="order-release-btn"
-            title="Release Order (default)"
-          >
-            Release Order
-          </button>
-          <button
-            className={`pill ${orderMode === 'chronology' ? 'active' : ''}`}
-            onClick={() => setOrderMode('chronology')}
-            id="order-chronology-btn"
-          >
-            MCU Story Order
-          </button>
-        </div>
+        {activePreset === 'complete-marvel' ? (
+          <div style={{ display: 'flex', gap: '0.35rem', flexShrink: 0 }}>
+            <span
+              className="pill active"
+              id="order-release-btn"
+              title="Complete Marvel is sorted by release date with no exceptions"
+            >
+              Release Order
+            </span>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', gap: '0.35rem', flexShrink: 0 }}>
+            <button
+              className={`pill ${orderMode === 'release' ? 'active' : ''}`}
+              onClick={() => setOrderMode('release')}
+              id="order-release-btn"
+              title="Release Order (default)"
+            >
+              Release Order
+            </button>
+            <button
+              className={`pill ${orderMode === 'chronology' ? 'active' : ''}`}
+              onClick={() => setOrderMode('chronology')}
+              id="order-chronology-btn"
+            >
+              MCU Story Order
+            </button>
+          </div>
+        )}
 
         {/* View toggle */}
         <div style={{ display: 'flex', gap: '0.25rem', flexShrink: 0 }}>

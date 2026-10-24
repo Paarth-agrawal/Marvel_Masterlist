@@ -11,6 +11,7 @@ const TIERS: { id: Tier; label: string; desc: string }[] = [
   { id: 'x-men',      label: 'X-Men Universe',      desc: 'Fox X-Men, Wolverine, pre-MCU Deadpool' },
   { id: 'spider-man', label: 'Spider-Man Franchises',desc: 'Raimi, Webb, Sony Spider-Verse' },
   { id: 'legacy',     label: 'Legacy Marvel',        desc: 'Pre-MCU theatrical: Blade, Fantastic Four, etc.' },
+  { id: 'sony',       label: 'Sony Marvel Universe', desc: 'Venom, Morbius, Madame Web, Kraven the Hunter' },
   { id: 'tv',         label: 'Marvel Television',    desc: 'Netflix Defenders-verse, ABC, Hulu, Freeform' },
   { id: 'animation',  label: 'Marvel Animation',     desc: 'Animated series outside MCU/Sony' },
 ];

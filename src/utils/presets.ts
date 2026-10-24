@@ -2,9 +2,15 @@ import type { Preset, PresetId, Tier } from '../types';
 
 export const PRESETS: Preset[] = [
   {
+    id: 'complete-marvel',
+    label: 'Complete Marvel',
+    description: 'Every Marvel screen production ever made across all studios, in release date order',
+    includes: ['mcu', 'x-men', 'spider-man', 'legacy', 'sony', 'tv', 'television', 'animation'],
+  },
+  {
     id: 'complete-mcu',
-    label: 'Complete MCU',
-    description: 'All MCU Tier 1 content',
+    label: 'MCU Only',
+    description: 'All official MCU Tier 1 content',
     includes: ['mcu'],
   },
   {
@@ -23,31 +29,32 @@ export const PRESETS: Preset[] = [
   {
     id: 'marvel-multiverse',
     label: 'Marvel Multiverse',
-    description: 'MCU + X-Men + Spider-Man franchises',
-    includes: ['mcu', 'x-men', 'spider-man'],
+    description: 'MCU + X-Men + Spider-Man + Sony franchises',
+    includes: ['mcu', 'x-men', 'spider-man', 'sony'],
   },
   {
     id: 'all-major',
     label: 'All Major Marvel',
     description: 'All tiers, excluding obscure legacy titles',
-    includes: ['mcu', 'x-men', 'spider-man', 'tv'],
+    includes: ['mcu', 'x-men', 'spider-man', 'sony', 'tv', 'television'],
   },
   {
     id: 'complete-catalog',
     label: 'Complete Marvel Screen',
-    description: 'All six tiers, including legacy and animation',
-    includes: ['mcu', 'x-men', 'spider-man', 'legacy', 'tv', 'animation'],
+    description: 'All tiers, including legacy and animation',
+    includes: ['mcu', 'x-men', 'spider-man', 'legacy', 'sony', 'tv', 'television', 'animation'],
   },
   {
     id: 'doomsday-prep',
     label: 'Doomsday Preparation',
     description: 'Titles recommended for Avengers: Doomsday',
-    includes: ['mcu', 'x-men', 'spider-man', 'legacy', 'tv', 'animation'],
+    includes: ['mcu', 'x-men', 'spider-man', 'legacy', 'sony', 'tv', 'television', 'animation'],
     doomsdayOnly: true,
   },
 ];
 
-export function getPreset(id: PresetId): Preset {
+export function getPreset(id: PresetId | string): Preset {
+  if (id === 'mcu-only') return PRESETS.find((p) => p.id === 'complete-mcu') ?? PRESETS[1];
   return PRESETS.find((p) => p.id === id) ?? PRESETS[0];
 }
 
@@ -55,7 +62,12 @@ export function filterByPreset(
   productions: { tier: Tier; contentType: string; releaseDate: string | null; doomsdayCategory: string | null }[],
   preset: Preset
 ): typeof productions {
-  let filtered = productions.filter((p) => preset.includes.includes(p.tier));
+  let filtered = productions.filter((p) => {
+    if (preset.includes.includes(p.tier)) return true;
+    if (preset.includes.includes('tv') && (p.tier as string) === 'television') return true;
+    if (preset.includes.includes('television') && (p.tier as string) === 'tv') return true;
+    return false;
+  });
 
   if (preset.contentTypeFilter) {
     filtered = filtered.filter((p) =>

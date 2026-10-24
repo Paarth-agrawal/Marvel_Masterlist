@@ -24,6 +24,12 @@
     "includes": []
   },
   {
+    "id": "sony",
+    "label": "Sony Marvel Universe",
+    "description": "Sony Pictures Universe of Marvel Characters (Venom, Morbius, Madame Web, Kraven)",
+    "includes": []
+  },
+  {
     "id": "tv",
     "label": "Marvel Television",
     "description": "Netflix Defenders-verse, ABC/Freeform/Hulu Marvel TV",

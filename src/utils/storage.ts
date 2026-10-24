@@ -12,7 +12,7 @@ const DEFAULT_PROGRESS: UserProgress = {
   watchProgress: {},
   preferences: {
     region: import.meta.env.VITE_APP_REGION || 'IN',
-    activePreset: 'complete-mcu',
+    activePreset: 'complete-marvel',
     orderMode: 'release',
     showSkipped: true,
     showUpcoming: true,

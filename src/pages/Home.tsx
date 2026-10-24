@@ -25,7 +25,8 @@ export default function Home() {
     const visible = progress.preferences.showUpcoming
       ? filtered
       : filtered.filter((p) => !p.isUpcoming);
-    return sortProductionsByMode(visible, progress.preferences.orderMode);
+    const effectiveMode = preset.id === 'complete-marvel' ? 'release' : progress.preferences.orderMode;
+    return sortProductionsByMode(visible, effectiveMode);
   }, [catalog, preset, progress.preferences.showUpcoming, progress.preferences.orderMode]);
 
   const nextToWatch = useMemo(

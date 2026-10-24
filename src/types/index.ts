@@ -14,7 +14,9 @@ export type Tier =
   | 'x-men'
   | 'spider-man'
   | 'legacy'
+  | 'sony'
   | 'tv'
+  | 'television'
   | 'animation';
 
 export type ReleaseStatus = 'released' | 'upcoming' | 'announced';
@@ -44,6 +46,8 @@ export type DoomsdayCategory =
 export type OrderMode = 'release' | 'chronology';
 
 export type PresetId =
+  | 'complete-marvel'
+  | 'mcu-only'
   | 'complete-mcu'
   | 'mcu-movies-only'
   | 'mcu-phase-1-3'
@@ -184,14 +188,14 @@ export interface DoomsdayData {
     releaseDate: string;
     directors: string[];
     villain: string;
-    villainActor: string;
+    villainActor?: string;
     confirmedRuntime: number;
     runtimeVerified: boolean;
     sources: string[];
     disclosureBanner: string;
   };
-  confirmedCast: DoomsdayCastMember[];
-  unconfirmedCast: DoomsdayCastMember[];
+  confirmedCast?: DoomsdayCastMember[];
+  unconfirmedCast?: DoomsdayCastMember[];
   recommendations: DoomsdayRecommendation[];
 }
 

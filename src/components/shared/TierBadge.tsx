@@ -6,7 +6,9 @@ const TIER_LABELS: Record<Tier, string> = {
   'x-men': 'X-Men',
   'spider-man': 'Spider-Man',
   'legacy': 'Legacy',
-  'tv': 'TV',
+  'sony': 'Sony',
+  'tv': 'Television',
+  'television': 'Television',
   'animation': 'Animation',
 };
 

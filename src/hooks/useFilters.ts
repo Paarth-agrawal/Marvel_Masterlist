@@ -58,7 +58,12 @@ export function useFilters(
     let result = skippedFiltered;
 
     if (filters.tiers.length > 0) {
-      result = result.filter((p) => filters.tiers.includes(p.tier as Tier));
+      result = result.filter((p) => {
+        if (filters.tiers.includes(p.tier as Tier)) return true;
+        if (filters.tiers.includes('tv') && (p.tier as string) === 'television') return true;
+        if (filters.tiers.includes('television') && (p.tier as string) === 'tv') return true;
+        return false;
+      });
     }
 
     if (filters.contentTypes.length > 0) {
@@ -125,13 +130,15 @@ export function useFilters(
     [filtered]
   );
 
+  const effectiveOrderMode = preset.id === 'complete-marvel' ? 'release' : progress.preferences.orderMode;
+
   const searched = useMemo(() => {
     if (!filters.searchQuery.trim()) {
-      return sortProductionsByMode(filtered, progress.preferences.orderMode);
+      return sortProductionsByMode(filtered, effectiveOrderMode);
     }
     const results = fuse.search(filters.searchQuery);
     return results.map((r) => r.item);
-  }, [filtered, fuse, filters.searchQuery, progress.preferences.orderMode]);
+  }, [filtered, fuse, filters.searchQuery, effectiveOrderMode]);
 
   const updateFilter = useCallback(
     <K extends keyof ActiveFilters>(key: K, value: ActiveFilters[K]) => {
@@ -164,6 +171,6 @@ export function useFilters(
     clearFilters,
     hasActiveFilters,
     filtered: searched,
-    presetFiltered: sortProductionsByMode(skippedFiltered, progress.preferences.orderMode),
+    presetFiltered: sortProductionsByMode(skippedFiltered, effectiveOrderMode),
   };
 }
