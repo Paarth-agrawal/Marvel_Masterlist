@@ -11,10 +11,9 @@ if (typeof window !== 'undefined') {
     if (!localStorage.getItem(PURGE_FLAG_KEY)) {
       localStorage.removeItem(POSTER_CACHE_KEY);
       localStorage.setItem(PURGE_FLAG_KEY, 'true');
-      console.log('[OMDB] Cleared old poster-cache-v1 for fresh IMDb-ID based fetching.');
     }
-  } catch (e) {
-    console.warn('Failed to clear poster-cache-v1', e);
+  } catch {
+    // ignore
   }
 }
 
@@ -89,29 +88,69 @@ export function isTitleMatching(expectedTitle: string, omdbTitle: string): boole
   return expTokens.some((tok) => omdbTokens.includes(tok));
 }
 
+let isOmdbQuotaBlocked = false;
+
+export function isOmdbBlocked(): boolean {
+  return isOmdbQuotaBlocked;
+}
+
 export async function fetchPosterByImdbId(
   imdbId: string,
   apiKey: string,
   expectedTitle?: string
 ): Promise<string | null> {
-  try {
-    const url = `https://www.omdbapi.com/?i=${encodeURIComponent(imdbId)}&apikey=${encodeURIComponent(apiKey)}`;
-    const res = await fetch(url);
-    if (!res.ok) return null;
-    const data = await res.json();
+  if (isOmdbQuotaBlocked) return null;
 
-    if (data && data.Response !== 'False' && data.Poster && data.Poster !== 'N/A') {
-      const omdbTitle = data.Title || '';
-      if (expectedTitle && !isTitleMatching(expectedTitle, omdbTitle)) {
-        console.warn(`Poster mismatch for ${expectedTitle}: got ${omdbTitle}`);
-        return null; // Reject poster
+  const url = `https://www.omdbapi.com/?i=${encodeURIComponent(imdbId)}&apikey=${encodeURIComponent(apiKey)}`;
+  const backoffDelays = [1000, 2000, 4000];
+
+  for (let attempt = 0; attempt <= 3; attempt++) {
+    if (isOmdbQuotaBlocked) return null;
+
+    try {
+      const res = await fetch(url);
+
+      // Handle rate limiting / unauthorized
+      if (res.status === 401 || res.status === 429) {
+        isOmdbQuotaBlocked = true;
+        console.warn(`[OMDB] API key limit or authorization error (${res.status}). Halting further OMDB requests.`);
+        return null;
       }
-      return data.Poster;
+
+      if (!res.ok) {
+        if (attempt < 3) {
+          await new Promise((r) => setTimeout(r, backoffDelays[attempt] || 1000));
+          continue;
+        }
+        return null;
+      }
+
+      const data = await res.json();
+
+      if (data && data.Response === 'False' && (data.Error?.includes('limit') || data.Error?.includes('Key'))) {
+        isOmdbQuotaBlocked = true;
+        console.warn(`[OMDB] API limit notice: ${data.Error}`);
+        return null;
+      }
+
+      if (data && data.Response !== 'False' && data.Poster && data.Poster !== 'N/A') {
+        const omdbTitle = data.Title || '';
+        if (expectedTitle && !isTitleMatching(expectedTitle, omdbTitle)) {
+          console.warn(`Poster mismatch for ${expectedTitle}: got ${omdbTitle}`);
+          return null; // Reject poster
+        }
+        return data.Poster;
+      }
+      return null;
+    } catch {
+      if (attempt < 3) {
+        await new Promise((r) => setTimeout(r, backoffDelays[attempt] || 1000));
+      } else {
+        return null;
+      }
     }
-    return null;
-  } catch {
-    return null;
   }
+  return null;
 }
 
 let isFetchingPosters = false;

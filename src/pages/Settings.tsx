@@ -8,7 +8,15 @@ import { Download, Upload, Trash2, AlertTriangle, CheckCircle, Info } from 'luci
 import type { UserProgress, PresetId } from '../types';
 
 export default function Settings() {
-  const { progress, setPreferences, setShowSkipped, setShowUpcoming, replaceProgress, clearProgress } = useProgressStore();
+  const {
+    progress,
+    setPreferences,
+    setShowSkipped,
+    setShowUpcoming,
+    setDataSaver,
+    replaceProgress,
+    clearProgress,
+  } = useProgressStore();
   const { catalog, knownIds } = useCatalog();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [importResult, setImportResult] = useState<{ valid: boolean; message: string; data?: UserProgress } | null>(null);
@@ -78,7 +86,7 @@ export default function Settings() {
         {/* Region */}
         <div className="settings-row">
           <div className="settings-row-info">
-            <div className="settings-row-label">Region</div>
+            <div className="settings-row-label">Region 🇮🇳</div>
             <div className="settings-row-desc">Used for streaming availability lookup</div>
           </div>
           <select
@@ -87,10 +95,26 @@ export default function Settings() {
             value={progress.preferences.region}
             onChange={(e) => setPreferences({ region: e.target.value })}
           >
-            <option value="IN">India (IN)</option>
+            <option value="IN">India (IN) 🇮🇳</option>
             <option value="US">United States (US)</option>
             <option value="GB">United Kingdom (GB)</option>
           </select>
+        </div>
+
+        {/* Data Saver Mode */}
+        <div className="settings-row">
+          <div className="settings-row-info">
+            <div className="settings-row-label">Data Saver (Slow Connections)</div>
+            <div className="settings-row-desc">
+              Disables poster image loading entirely and shows text-only cards for faster browsing
+            </div>
+          </div>
+          <button
+            id="toggle-data-saver"
+            className={`toggle ${progress.preferences.dataSaver ? 'on' : ''}`}
+            onClick={() => setDataSaver(!progress.preferences.dataSaver)}
+            aria-label="Toggle Data Saver"
+          />
         </div>
 
         {/* Default preset */}

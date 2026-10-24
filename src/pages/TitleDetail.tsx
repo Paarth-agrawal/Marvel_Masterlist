@@ -6,7 +6,7 @@ import { TierBadge } from '../components/shared/TierBadge';
 import { Poster } from '../components/shared/Poster';
 import { WatchStatusSelect } from '../components/shared/WatchStatus';
 import { StreamingBadges } from '../components/shared/StreamingBadges';
-import { formatReleaseDate, getReleaseYear } from '../utils/releaseOrder';
+import { formatReleaseDate, getReleaseYear, formatRuntime } from '../utils/releaseOrder';
 import { ArrowLeft, Clock, Calendar, AlertCircle, ExternalLink } from 'lucide-react';
 import type { Production } from '../types';
 
@@ -83,7 +83,7 @@ export default function TitleDetail() {
             </span>
             {production.runtimeMinutes && (
               <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                <Clock size={14} /> {production.runtimeMinutes} min
+                <Clock size={14} /> {formatRuntime(production.runtimeMinutes)}
               </span>
             )}
             {production.ageRating && <span style={{ border: '1px solid var(--border)', borderRadius: 3, padding: '0px 5px', fontSize: '0.72rem' }}>{production.ageRating}</span>}

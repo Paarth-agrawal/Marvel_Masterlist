@@ -1,0 +1,16 @@
+{
+  "name": "Marvel Watchlist",
+  "short_name": "MarvelList",
+  "description": "Track every Marvel movie and series in release order. Find where to stream in India. Prepare for Avengers: Doomsday.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d0d10",
+  "theme_color": "#0d0d10",
+  "icons": [
+    {
+      "src": "/marvel-m.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

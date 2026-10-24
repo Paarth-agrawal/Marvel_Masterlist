@@ -147,20 +147,44 @@ export function sortProductionsByMode(
 }
 
 /**
- * Format a release date string (YYYY-MM-DD) for display
+ * Format a release date string (YYYY-MM-DD) for Indian display: DD MMM YYYY (e.g. 02 May 2008)
  */
 export function formatReleaseDate(date: string | null): string {
   if (!date) return 'TBA';
   try {
+    const parts = date.split('-');
+    if (parts.length === 3) {
+      const year = parts[0];
+      const monthIdx = parseInt(parts[1], 10) - 1;
+      const day = parts[2].padStart(2, '0');
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const monthName = months[monthIdx] || parts[1];
+      return `${day} ${monthName} ${year}`;
+    }
     const d = new Date(date + 'T00:00:00');
-    return d.toLocaleDateString('en-IN', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = d.toLocaleString('en-US', { month: 'short' });
+    const year = d.getFullYear();
+    return `${day} ${month} ${year}`;
   } catch {
     return date;
   }
+}
+
+/**
+ * Format runtime minutes to Indian/International display: 2h 6m (not 126m)
+ */
+export function formatRuntime(minutes: number | null | undefined): string {
+  if (!minutes || minutes <= 0) return '';
+  const hours = Math.floor(minutes / 60);
+  const remMinutes = minutes % 60;
+  if (hours > 0 && remMinutes > 0) {
+    return `${hours}h ${remMinutes}m`;
+  }
+  if (hours > 0) {
+    return `${hours}h`;
+  }
+  return `${remMinutes}m`;
 }
 
 /**

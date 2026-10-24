@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Header } from './components/layout/Header';
 import { ErrorBoundary } from './components/shared/ErrorBoundary';
+import { MilestoneToast } from './components/shared/MilestoneToast';
 
 const Home       = lazy(() => import('./pages/Home'));
 const Timeline   = lazy(() => import('./pages/Timeline'));
@@ -26,6 +27,7 @@ export default function App() {
   return (
     <div className="app">
       <Header />
+      <MilestoneToast />
       <main className="main-content">
         <ErrorBoundary>
           <Suspense fallback={<PageLoader />}>

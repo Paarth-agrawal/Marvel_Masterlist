@@ -120,6 +120,7 @@ export interface UserPreferences {
   orderMode: OrderMode;
   showSkipped: boolean;
   showUpcoming: boolean;
+  dataSaver?: boolean;
 }
 
 export interface UserProgress {

@@ -12,6 +12,7 @@ interface ProgressStore {
   setOrderMode: (mode: OrderMode) => void;
   setShowSkipped: (show: boolean) => void;
   setShowUpcoming: (show: boolean) => void;
+  setDataSaver: (enabled: boolean) => void;
   setPreferences: (prefs: Partial<UserPreferences>) => void;
   replaceProgress: (progress: UserProgress) => void;
   clearProgress: () => void;
@@ -73,6 +74,16 @@ export const useProgressStore = create<ProgressStore>((set, get) => ({
     const updated: UserProgress = {
       ...current,
       preferences: { ...current.preferences, showUpcoming: show },
+    };
+    set({ progress: updated });
+    saveProgress(updated);
+  },
+
+  setDataSaver: (enabled: boolean) => {
+    const current = get().progress;
+    const updated: UserProgress = {
+      ...current,
+      preferences: { ...current.preferences, dataSaver: enabled },
     };
     set({ progress: updated });
     saveProgress(updated);

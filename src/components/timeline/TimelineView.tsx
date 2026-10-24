@@ -363,9 +363,9 @@ export function TimelineView({
       {/* Results */}
       {productions.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-state-icon">🔍</div>
-          <h3>No Results</h3>
-          <p>No titles match your current filters.</p>
+          <div className="empty-state-icon">🪐</div>
+          <h3>No titles found</h3>
+          <p>Perhaps the search was... inevitable.</p>
           {hasActiveFilters && (
             <button className="btn btn-primary" style={{ marginTop: '1rem' }} onClick={clearFilters} id="clear-filters-empty-btn">
               Clear filters

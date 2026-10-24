@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import type { StreamingRecord } from '../../types';
 import { ExternalLink, Info } from 'lucide-react';
+import { sortAndFilterProviders } from '../../utils/streamingApi';
 
 interface StreamingBadgesProps {
   record: StreamingRecord | null;
@@ -35,6 +36,10 @@ function getBrandClass(name: string): string {
 }
 
 export const StreamingBadges: React.FC<StreamingBadgesProps> = ({ record }) => {
+  const validProviders = useMemo(() => {
+    return record ? sortAndFilterProviders(record.providers) : [];
+  }, [record]);
+
   if (!record) {
     return (
       <span className="streaming-unavailable">
@@ -44,7 +49,7 @@ export const StreamingBadges: React.FC<StreamingBadgesProps> = ({ record }) => {
     );
   }
 
-  if (record.providers.length === 0) {
+  if (validProviders.length === 0) {
     return (
       <span className="streaming-not-found">
         Not found on checked services
@@ -54,8 +59,9 @@ export const StreamingBadges: React.FC<StreamingBadgesProps> = ({ record }) => {
 
   return (
     <div className="streaming-badges">
-      {record.providers.map((p, i) => {
+      {validProviders.map((p, i) => {
         const brandClass = getBrandClass(p.name);
+        const isJioHotstar = p.name.includes('Hotstar');
         return (
           <a
             key={i}
@@ -63,7 +69,7 @@ export const StreamingBadges: React.FC<StreamingBadgesProps> = ({ record }) => {
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            className={`streaming-badge ${brandClass || (TYPE_CLASS[p.type] ?? '')} ${!p.verified ? 'streaming-badge-unverified' : ''}`}
+            className={`streaming-badge ${brandClass || (TYPE_CLASS[p.type] ?? '')} ${isJioHotstar ? 'streaming-badge-prominent' : ''} ${!p.verified ? 'streaming-badge-unverified' : ''}`}
             title={!p.verified ? `${p.name} — Availability not verified — check provider website` : `Watch on ${p.name}`}
           >
             {p.name} · {TYPE_LABELS[p.type]}

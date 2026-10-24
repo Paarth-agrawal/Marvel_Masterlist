@@ -67,6 +67,50 @@ export function Header() {
             >
               <Search size={16} />
             </button>
+
+            {/* Circular progress ring next to settings */}
+            <div
+              className="nav-progress-ring-wrapper"
+              title={`Marvel Watchlist Progress: ${Math.round(completionPercent)}%`}
+              onClick={() => navigate('/settings')}
+              style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            >
+              <svg width="34" height="34" viewBox="0 0 34 34" className="nav-progress-ring">
+                <circle
+                  cx="17"
+                  cy="17"
+                  r="13"
+                  fill="transparent"
+                  stroke="rgba(255, 255, 255, 0.12)"
+                  strokeWidth="2.5"
+                />
+                <circle
+                  cx="17"
+                  cy="17"
+                  r="13"
+                  fill="transparent"
+                  stroke="var(--accent-red)"
+                  strokeWidth="2.5"
+                  strokeDasharray={2 * Math.PI * 13}
+                  strokeDashoffset={2 * Math.PI * 13 * (1 - completionPercent / 100)}
+                  strokeLinecap="round"
+                  transform="rotate(-90 17 17)"
+                  style={{ transition: 'stroke-dashoffset 0.4s ease' }}
+                />
+                <text
+                  x="17"
+                  y="20.5"
+                  textAnchor="middle"
+                  fill="var(--text-primary)"
+                  fontSize="8.5"
+                  fontWeight="700"
+                  fontFamily="Inter, sans-serif"
+                >
+                  {Math.round(completionPercent)}%
+                </text>
+              </svg>
+            </div>
+
             <button
               id="settings-btn"
               className="icon-btn"

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import doomsdayData from '../../data/doomsday.json';
 import { useCatalog } from '../hooks/useCatalog';
@@ -6,7 +6,7 @@ import { useProgressStore } from '../store/progressStore';
 import { TierBadge } from '../components/shared/TierBadge';
 import { Poster } from '../components/shared/Poster';
 import { WatchStatusSelect } from '../components/shared/WatchStatus';
-import { AlertTriangle, Calendar, ChevronRight, Users } from 'lucide-react';
+import { AlertTriangle, Calendar, ChevronRight, Users, Clock, Flame } from 'lucide-react';
 import type { Production } from '../types';
 
 const CATEGORY_CONFIG = {
@@ -18,9 +18,30 @@ const CATEGORY_CONFIG = {
 
 type CategoryKey = keyof typeof CATEGORY_CONFIG;
 
+function getDoomsdayCountdown() {
+  const target = new Date('2026-12-18T00:00:00+05:30').getTime();
+  const now = Date.now();
+  const diff = Math.max(0, target - now);
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  return { days, hours, minutes, seconds };
+}
+
 export default function Doomsday() {
   const { catalog } = useCatalog();
   const { progress } = useProgressStore();
+  const [countdown, setCountdown] = useState(getDoomsdayCountdown);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCountdown(getDoomsdayCountdown());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const catalogById = useMemo(() => {
     const map = new Map<string, Production>();
@@ -44,27 +65,61 @@ export default function Doomsday() {
 
   return (
     <div style={{ paddingTop: '1.5rem' }}>
-      {/* Hero */}
+      {/* Hero with dramatic Doctor Doom atmospheric glow & live countdown */}
       <div className="doomsday-hero">
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-          <div style={{ flex: 1, minWidth: 220 }}>
-            <div style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--accent-red)', fontWeight: 700, marginBottom: '0.5rem' }}>
-              AVENGERS: DOOMSDAY
+        <div className="doomsday-hero-inner">
+          <div style={{ flex: 1, minWidth: 260 }}>
+            <div className="doomsday-hero-badge">
+              <Flame size={14} color="var(--accent-red)" />
+              <span>MARVEL CINEMATIC UNIVERSE · EVENT RELEASE</span>
             </div>
-            <h1 className="page-title" style={{ fontSize: '3rem', marginBottom: '0.75rem' }}>
-              DOOMSDAY PREPARATION
+            <h1 className="doomsday-hero-title">
+              AVENGERS: DOOMSDAY
             </h1>
-            <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
+            <p className="doomsday-hero-subtitle">
+              All roads lead to Doom. Complete the essential timeline before the multiverse falls.
+            </p>
+
+            <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <Calendar size={14} />
-                December 18, 2026
+                <Calendar size={14} color="var(--accent-gold)" />
+                18 December 2026
               </span>
               <span>Directors: Anthony &amp; Joe Russo</span>
-              <span>Villain: Robert Downey Jr. as <strong style={{ color: 'var(--accent-red)' }}>Doctor Doom</strong></span>
+              <span>Villain: Robert Downey Jr. as <strong style={{ color: '#ff3b53', textShadow: '0 0 10px rgba(255,59,83,0.5)' }}>Doctor Doom</strong></span>
+            </div>
+
+            {/* Dramatic Countdown Timer */}
+            <div className="doomsday-countdown-section">
+              <div className="doomsday-countdown-label">
+                <Clock size={13} color="var(--accent-red)" />
+                <span>COUNTDOWN TO DOOMSDAY</span>
+              </div>
+              <div className="doomsday-countdown-grid">
+                <div className="doomsday-countdown-unit">
+                  <div className="doomsday-countdown-value">{countdown.days}</div>
+                  <div className="doomsday-countdown-sub">DAYS</div>
+                </div>
+                <div className="doomsday-countdown-colon">:</div>
+                <div className="doomsday-countdown-unit">
+                  <div className="doomsday-countdown-value">{String(countdown.hours).padStart(2, '0')}</div>
+                  <div className="doomsday-countdown-sub">HOURS</div>
+                </div>
+                <div className="doomsday-countdown-colon">:</div>
+                <div className="doomsday-countdown-unit">
+                  <div className="doomsday-countdown-value">{String(countdown.minutes).padStart(2, '0')}</div>
+                  <div className="doomsday-countdown-sub">MINS</div>
+                </div>
+                <div className="doomsday-countdown-colon">:</div>
+                <div className="doomsday-countdown-unit">
+                  <div className="doomsday-countdown-value">{String(countdown.seconds).padStart(2, '0')}</div>
+                  <div className="doomsday-countdown-sub">SECS</div>
+                </div>
+              </div>
             </div>
 
             {/* Confirmed cast */}
-            <div style={{ marginBottom: '1rem' }}>
+            <div style={{ marginTop: '1.5rem', marginBottom: '1rem' }}>
               <div style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-muted)', fontWeight: 600, marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
                 <Users size={12} /> Confirmed Cast
               </div>
