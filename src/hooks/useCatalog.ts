@@ -39,9 +39,16 @@ function initBackgroundWorkers() {
 
   const catalog = catalogData as Production[];
 
-  // 1. Start OMDB poster background fetch (1000/day limit respected, cached in poster-cache-v1)
+  // 1. Start Multi-API poster background fetch (OMDB -> TVmaze -> Fanart.tv)
   startBackgroundPosterFetch(
-    catalog.map((p) => ({ id: p.id, title: p.title, imdbId: p.imdbId })),
+    catalog.map((p) => ({
+      id: p.id,
+      title: p.title,
+      imdbId: p.imdbId,
+      tmdbId: p.tmdbId,
+      contentType: p.contentType,
+      parentSeriesId: p.parentSeriesId,
+    })),
     (id, url) => {
       currentPosters = { ...currentPosters, [id]: url };
       notifyListeners();

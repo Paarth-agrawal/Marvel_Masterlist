@@ -1,16 +1,34 @@
 /**
- * OMDB API client and poster caching utilities
+ * Multi-API Poster Waterfall System
+ * Stage 1: OMDB API (IMDb ID)
+ * Stage 2: TVmaze API (Free, TV series / animated shows)
+ * Stage 3: Fanart.tv API (Movies: TMDB/IMDb, TV: TVDB/IMDb)
  */
 
-const POSTER_CACHE_KEY = 'poster-cache-v1';
-const PURGE_FLAG_KEY = 'poster-cache-v1-purged-fix-2026';
+export interface PosterCacheEntry {
+  url: string;
+  source: 'omdb' | 'tvmaze' | 'fanart' | 'none';
+}
 
-// One-time auto-purge of old wrong title-queried cache so fresh IMDb-queried posters are fetched
+export interface PosterWaterfallItem {
+  id: string;
+  title: string;
+  imdbId: string | null;
+  tmdbId?: number | null;
+  tvdbId?: string | number | null;
+  contentType?: string;
+  parentSeriesId?: string | null;
+}
+
+const POSTER_CACHE_KEY = 'poster-cache-v1';
+const WATERFALL_PURGE_FLAG = 'poster-cache-v1-waterfall-purged-2026-v2';
+
+// Clear old cache once on startup so all posters are re-fetched with new multi-API waterfall
 if (typeof window !== 'undefined') {
   try {
-    if (!localStorage.getItem(PURGE_FLAG_KEY)) {
+    if (!localStorage.getItem(WATERFALL_PURGE_FLAG)) {
       localStorage.removeItem(POSTER_CACHE_KEY);
-      localStorage.setItem(PURGE_FLAG_KEY, 'true');
+      localStorage.setItem(WATERFALL_PURGE_FLAG, 'true');
     }
   } catch {
     // ignore
@@ -27,6 +45,11 @@ export function getOmdbApiKey(): string {
   return raw.trim();
 }
 
+export function getFanartApiKey(): string {
+  const raw = import.meta.env.VITE_FANART_API_KEY || '';
+  return raw.trim();
+}
+
 export function clearPosterCache(): void {
   try {
     localStorage.removeItem(POSTER_CACHE_KEY);
@@ -35,21 +58,78 @@ export function clearPosterCache(): void {
   }
 }
 
-export function getCachedPosters(): Record<string, string> {
+export function getCachedPosterEntries(): Record<string, PosterCacheEntry> {
   try {
     const raw = localStorage.getItem(POSTER_CACHE_KEY);
-    return raw ? JSON.parse(raw) : {};
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    const result: Record<string, PosterCacheEntry> = {};
+    for (const [key, val] of Object.entries(parsed)) {
+      if (typeof val === 'string') {
+        if (val) {
+          result[key] = { url: val, source: 'omdb' };
+        } else {
+          result[key] = { url: '', source: 'none' };
+        }
+      } else if (val && typeof val === 'object' && 'url' in val) {
+        result[key] = val as PosterCacheEntry;
+      }
+    }
+    return result;
   } catch {
     return {};
   }
 }
 
+export function getCachedPosters(): Record<string, string> {
+  const entries = getCachedPosterEntries();
+  const posters: Record<string, string> = {};
+  for (const [key, entry] of Object.entries(entries)) {
+    if (entry.url) {
+      posters[key] = entry.url;
+    }
+  }
+  return posters;
+}
+
+export function saveCachedPosterEntry(id: string, entry: PosterCacheEntry): void {
+  try {
+    const raw = localStorage.getItem(POSTER_CACHE_KEY);
+    const cache = raw ? JSON.parse(raw) : {};
+    cache[id] = entry;
+    localStorage.setItem(POSTER_CACHE_KEY, JSON.stringify(cache));
+  } catch (e) {
+    console.warn('Failed to save poster cache entry to localStorage', e);
+  }
+}
+
 export function saveCachedPosters(cache: Record<string, string>): void {
   try {
-    localStorage.setItem(POSTER_CACHE_KEY, JSON.stringify(cache));
+    const currentEntries = getCachedPosterEntries();
+    for (const [id, url] of Object.entries(cache)) {
+      currentEntries[id] = { url, source: currentEntries[id]?.source || 'omdb' };
+    }
+    localStorage.setItem(POSTER_CACHE_KEY, JSON.stringify(currentEntries));
   } catch (e) {
     console.warn('Failed to save poster cache to localStorage', e);
   }
+}
+
+/**
+ * Clean series title to maximize TVmaze and search hits
+ */
+export function cleanShowTitle(title: string): string {
+  return title
+    .replace(/\s+S\d+(\s*-\s*S\d+)?$/i, '')
+    .replace(/\s+Season\s+\d+$/i, '')
+    .replace(/\s*\(Netflix\)$/i, '')
+    .replace(/\s*\(1992 series\)$/i, '')
+    .replace(/\s*\(animated\)$/i, '')
+    .replace(/\s*\(2017 animated\)$/i, '')
+    .replace(/\s*\(Raimi\)$/i, '')
+    .replace(/\s*\(Ang Lee\)$/i, '')
+    .replace(/\s*\(One-Shot\)$/i, '')
+    .trim();
 }
 
 /**
@@ -60,15 +140,13 @@ export function isTitleMatching(expectedTitle: string, omdbTitle: string): boole
   if (!expectedTitle || !omdbTitle) return false;
 
   const clean = (str: string) => str.toLowerCase().replace(/[^a-z0-9]/g, '');
-  const expClean = clean(expectedTitle);
-  const omdbClean = clean(omdbTitle);
+  const expClean = clean(cleanShowTitle(expectedTitle));
+  const omdbClean = clean(cleanShowTitle(omdbTitle));
 
-  // Exact or substring match
   if (expClean.includes(omdbClean) || omdbClean.includes(expClean)) {
     return true;
   }
 
-  // Token / keyword overlap
   const stopWords = new Set([
     'the', 'and', 'for', 'part', 'season', 'series', 'movie', 'marvel',
     'marvels', 'of', 'in', 'an', 'to', 'all', 'a', 'or', 'by', 'vol', 'on'
@@ -84,7 +162,6 @@ export function isTitleMatching(expectedTitle: string, omdbTitle: string): boole
   const expTokens = getKeywords(expectedTitle);
   const omdbTokens = getKeywords(omdbTitle);
 
-  // If at least one significant keyword matches
   return expTokens.some((tok) => omdbTokens.includes(tok));
 }
 
@@ -94,112 +171,256 @@ export function isOmdbBlocked(): boolean {
   return isOmdbQuotaBlocked;
 }
 
+// ── STAGE 1: OMDB ─────────────────────────────────────────────
+export async function fetchStage1Omdb(
+  imdbId: string,
+  apiKey: string,
+  expectedTitle?: string
+): Promise<string | null> {
+  if (isOmdbQuotaBlocked || !imdbId || !apiKey) return null;
+
+  const url = `https://www.omdbapi.com/?i=${encodeURIComponent(imdbId)}&apikey=${encodeURIComponent(apiKey)}`;
+
+  try {
+    const res = await fetch(url);
+    if (res.status === 401 || res.status === 429) {
+      isOmdbQuotaBlocked = true;
+      console.warn(`[OMDB] API key limit or authorization error (${res.status}). Skipping OMDB stage.`);
+      return null;
+    }
+
+    if (!res.ok) return null;
+
+    const data = await res.json();
+    if (data && data.Response === 'False' && (data.Error?.includes('limit') || data.Error?.includes('Key'))) {
+      isOmdbQuotaBlocked = true;
+      console.warn(`[OMDB] API limit notice: ${data.Error}`);
+      return null;
+    }
+
+    if (data && data.Response !== 'False' && data.Poster && data.Poster !== 'N/A') {
+      const omdbTitle = data.Title || '';
+      if (expectedTitle && !isTitleMatching(expectedTitle, omdbTitle)) {
+        console.warn(`[OMDB] Poster mismatch for ${expectedTitle}: got ${omdbTitle}`);
+        return null;
+      }
+      return data.Poster;
+    }
+    return null;
+  } catch (e) {
+    console.warn(`[OMDB] Failed request for ${imdbId}`, e);
+    return null;
+  }
+}
+
+// ── STAGE 2: TVmaze (Free, No Key, Series only) ───────────────
+export async function fetchStage2Tvmaze(title: string): Promise<string | null> {
+  if (!title) return null;
+
+  const clean = cleanShowTitle(title);
+  const searchQueries = [clean];
+
+  // Specific aliases for tricky titles
+  if (clean.toLowerCase().includes('freshman year')) {
+    searchQueries.unshift('Your Friendly Neighborhood Spider-Man');
+  } else if (clean.toLowerCase() === 'agents of shield') {
+    searchQueries.unshift('Agents of S.H.I.E.L.D.');
+  }
+
+  // Fallback prefix for Marvel productions
+  if (!clean.toLowerCase().includes('marvel')) {
+    searchQueries.push(`Marvel's ${clean}`);
+  }
+
+  for (const q of searchQueries) {
+    try {
+      const endpoint = `https://api.tvmaze.com/search/shows?q=${encodeURIComponent(q)}`;
+      const res = await fetch(endpoint);
+      if (!res.ok) continue;
+
+      const results = await res.json();
+      if (!Array.isArray(results) || results.length === 0) continue;
+
+      // Check results for image
+      for (const item of results) {
+        const img = item?.show?.image?.original || item?.show?.image?.medium;
+        if (img) return img;
+      }
+    } catch (e) {
+      console.warn(`[TVmaze] Failed search for "${q}"`, e);
+    }
+  }
+
+  return null;
+}
+
+// ── STAGE 3: Fanart.tv ─────────────────────────────────────────
+export async function fetchStage3Fanart(
+  item: PosterWaterfallItem,
+  apiKey: string
+): Promise<string | null> {
+  if (!apiKey) return null;
+
+  const isSeries = item.contentType === 'series' || item.contentType === 'animated-series';
+
+  try {
+    if (isSeries) {
+      const targetId = item.tvdbId || item.imdbId;
+      if (!targetId) return null;
+      const url = `https://webservice.fanart.tv/v3/tv/${encodeURIComponent(String(targetId))}?api_key=${encodeURIComponent(apiKey)}`;
+      const res = await fetch(url);
+      if (!res.ok) return null;
+      const data = await res.json();
+      return data.tvposter?.[0]?.url || data.seasonposter?.[0]?.url || null;
+    } else {
+      const targetId = item.tmdbId || item.imdbId;
+      if (!targetId) return null;
+      const url = `https://webservice.fanart.tv/v3/movies/${encodeURIComponent(String(targetId))}?api_key=${encodeURIComponent(apiKey)}`;
+      const res = await fetch(url);
+      if (!res.ok) return null;
+      const data = await res.json();
+      return data.movieposter?.[0]?.url || null;
+    }
+  } catch (e) {
+    console.warn(`[Fanart.tv] Failed request for ${item.id}`, e);
+    return null;
+  }
+}
+
+/**
+ * Executes the 3-stage waterfall:
+ * 1. OMDB
+ * 2. TVmaze (if series and OMDB had no poster)
+ * 3. Fanart.tv
+ */
+export async function fetchPosterWaterfall(
+  item: PosterWaterfallItem,
+  omdbApiKey: string,
+  fanartApiKey: string
+): Promise<PosterCacheEntry | null> {
+  // STAGE 1 — OMDB
+  if (item.imdbId && omdbApiKey) {
+    const omdbUrl = await fetchStage1Omdb(item.imdbId, omdbApiKey, item.title);
+    if (omdbUrl) {
+      return { url: omdbUrl, source: 'omdb' };
+    }
+  }
+
+  // STAGE 2 — TVmaze (series / animated-series)
+  const isSeries = item.contentType === 'series' || item.contentType === 'animated-series';
+  if (isSeries) {
+    const tvmazeUrl = await fetchStage2Tvmaze(item.title);
+    if (tvmazeUrl) {
+      return { url: tvmazeUrl, source: 'tvmaze' };
+    }
+  }
+
+  // STAGE 3 — Fanart.tv
+  if (fanartApiKey) {
+    const fanartUrl = await fetchStage3Fanart(item, fanartApiKey);
+    if (fanartUrl) {
+      return { url: fanartUrl, source: 'fanart' };
+    }
+  }
+
+  return null;
+}
+
+// Backward compatibility alias for single-item OMDB call
 export async function fetchPosterByImdbId(
   imdbId: string,
   apiKey: string,
   expectedTitle?: string
 ): Promise<string | null> {
-  if (isOmdbQuotaBlocked) return null;
-
-  const url = `https://www.omdbapi.com/?i=${encodeURIComponent(imdbId)}&apikey=${encodeURIComponent(apiKey)}`;
-  const backoffDelays = [1000, 2000, 4000];
-
-  for (let attempt = 0; attempt <= 3; attempt++) {
-    if (isOmdbQuotaBlocked) return null;
-
-    try {
-      const res = await fetch(url);
-
-      // Handle rate limiting / unauthorized
-      if (res.status === 401 || res.status === 429) {
-        isOmdbQuotaBlocked = true;
-        console.warn(`[OMDB] API key limit or authorization error (${res.status}). Halting further OMDB requests.`);
-        return null;
-      }
-
-      if (!res.ok) {
-        if (attempt < 3) {
-          await new Promise((r) => setTimeout(r, backoffDelays[attempt] || 1000));
-          continue;
-        }
-        return null;
-      }
-
-      const data = await res.json();
-
-      if (data && data.Response === 'False' && (data.Error?.includes('limit') || data.Error?.includes('Key'))) {
-        isOmdbQuotaBlocked = true;
-        console.warn(`[OMDB] API limit notice: ${data.Error}`);
-        return null;
-      }
-
-      if (data && data.Response !== 'False' && data.Poster && data.Poster !== 'N/A') {
-        const omdbTitle = data.Title || '';
-        if (expectedTitle && !isTitleMatching(expectedTitle, omdbTitle)) {
-          console.warn(`Poster mismatch for ${expectedTitle}: got ${omdbTitle}`);
-          return null; // Reject poster
-        }
-        return data.Poster;
-      }
-      return null;
-    } catch {
-      if (attempt < 3) {
-        await new Promise((r) => setTimeout(r, backoffDelays[attempt] || 1000));
-      } else {
-        return null;
-      }
-    }
-  }
-  return null;
+  return fetchStage1Omdb(imdbId, apiKey, expectedTitle);
 }
 
 let isFetchingPosters = false;
 
+const PRIORITY_SERIES_KEYWORDS = [
+  'daredevil',
+  'jessica jones',
+  'luke cage',
+  'iron fist',
+  'defenders',
+  'punisher',
+  'shield',
+  'agent carter',
+  'runaways',
+  'cloak',
+  'wandavision',
+  'loki',
+  'hawkeye',
+  'moon knight',
+  'she-hulk',
+  'secret invasion',
+  'echo',
+  'agatha',
+  'x-men',
+  'avengers: earth'
+];
+
 /**
- * Fetch poster URLs in the background for titles missing from cache.
- * Check cache first, batch requests smoothly, validate titles, update as they arrive.
+ * Background worker executing the 3-stage waterfall for all missing posters.
+ * Uses 300ms delay between requests to avoid rate limits.
  */
 export async function startBackgroundPosterFetch(
-  titles: { id: string; title: string; imdbId: string | null }[],
+  titles: PosterWaterfallItem[],
   onPosterLoaded: (id: string, url: string) => void
 ): Promise<void> {
-  const apiKey = getOmdbApiKey();
-  if (!apiKey || isFetchingPosters) return;
-
+  if (isFetchingPosters) return;
   isFetchingPosters = true;
-  const cache = getCachedPosters();
 
-  // Find titles with imdbId not yet in cache
-  const missing = titles.filter(
-    (t) => t.imdbId && typeof cache[t.id] === 'undefined'
-  );
+  const omdbApiKey = getOmdbApiKey();
+  const fanartApiKey = getFanartApiKey();
+  const cacheEntries = getCachedPosterEntries();
+
+  // Find titles not yet cached with a valid url
+  const missing = titles.filter((t) => {
+    const entry = cacheEntries[t.id];
+    return !entry || (!entry.url && entry.source !== 'none');
+  });
 
   if (missing.length === 0) {
     isFetchingPosters = false;
     return;
   }
 
-  // Process in small batches with slight spacing to respect rate limits
-  const BATCH_SIZE = 4;
-  for (let i = 0; i < missing.length; i += BATCH_SIZE) {
-    const batch = missing.slice(i, i + BATCH_SIZE);
-    await Promise.all(
-      batch.map(async (t) => {
-        if (!t.imdbId) return;
-        const posterUrl = await fetchPosterByImdbId(t.imdbId, apiKey, t.title);
-        if (posterUrl) {
-          cache[t.id] = posterUrl;
-          saveCachedPosters(cache);
-          onPosterLoaded(t.id, posterUrl);
-        } else {
-          // Cache empty string so we don't re-query missing/rejected posters
-          cache[t.id] = '';
-          saveCachedPosters(cache);
-        }
-      })
+  // Sort priority series first as requested
+  const sortedMissing = [...missing].sort((a, b) => {
+    const aIsPriority = PRIORITY_SERIES_KEYWORDS.some((kw) =>
+      a.title.toLowerCase().includes(kw)
     );
-    // 50ms pause between batches
-    await new Promise((r) => setTimeout(r, 50));
+    const bIsPriority = PRIORITY_SERIES_KEYWORDS.some((kw) =>
+      b.title.toLowerCase().includes(kw)
+    );
+    if (aIsPriority && !bIsPriority) return -1;
+    if (!aIsPriority && bIsPriority) return 1;
+    return 0;
+  });
+
+  for (const item of sortedMissing) {
+    // Re-check cache before calling
+    const latestCache = getCachedPosterEntries();
+    if (latestCache[item.id]?.url) {
+      continue;
+    }
+
+    try {
+      const result = await fetchPosterWaterfall(item, omdbApiKey, fanartApiKey);
+      if (result && result.url) {
+        saveCachedPosterEntry(item.id, result);
+        onPosterLoaded(item.id, result.url);
+      } else {
+        // Cache none so we avoid spamming on reload
+        saveCachedPosterEntry(item.id, { url: '', source: 'none' });
+      }
+    } catch (e) {
+      console.warn(`[Waterfall] Error fetching poster for ${item.title}:`, e);
+    }
+
+    // 300ms delay between requests to avoid rate limiting
+    await new Promise((r) => setTimeout(r, 300));
   }
 
   isFetchingPosters = false;

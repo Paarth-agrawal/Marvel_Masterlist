@@ -1696,21 +1696,201 @@ a:hover { color: var(--text-primary); }
   user-select: none;
 }
 
-/* ── Doomsday Recommendation Cards & Distinct Headers ────── */
-.doomsday-top-disclaimer {
-  background: rgba(18, 18, 28, 0.95);
-  border: 1px solid rgba(201, 168, 76, 0.35);
+/* ── Doctor Doom Official Visual Identity Theme (Avengers: Doomsday) ──────
+   Scoped exclusively to .doomsday-page to protect all other pages */
+.doomsday-page {
+  --doom-green:        #71826a;  /* official Doom green */
+  --doom-green-dark:   #2d3b2a;  /* deep Latverian green */
+  --doom-green-glow:   #4a5e44;  /* mid green for glows */
+  --doom-gold:         #c9a84c;  /* stained glass gold */
+  --doom-gold-light:   #e8c96a;  /* bright gold highlights */
+  --doom-black:        #0f1510;  /* green-tinted near black */
+  --doom-text:         #d4e8d0;  /* pale green-white text */
+  --doom-text-muted:   #8aab84;  /* muted green text */
+
+  background-color: var(--doom-black);
+  background-image: radial-gradient(circle at 50% 0%, var(--doom-green-dark) 0%, rgba(15, 21, 16, 0.98) 65%, var(--doom-black) 100%);
+  color: var(--doom-text);
+  min-height: 100vh;
+  margin: 0 -1.5rem -3rem;
+  padding: 1.5rem 1.5rem 5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Atmospheric Magic Crackle Pulsing Effect */
+.doomsday-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1200px;
+  height: 600px;
+  pointer-events: none;
+  border-radius: 50%;
+  box-shadow:
+    0 0 60px 10px rgba(74, 94, 68, 0.4),
+    inset 0 0 80px 20px rgba(74, 94, 68, 0.3),
+    0 40px 120px 30px rgba(113, 130, 106, 0.2);
+  animation: magicCrackle 4s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes magicCrackle {
+  0% {
+    opacity: 0.3;
+    transform: translateX(-50%) scale(0.97);
+    box-shadow:
+      0 0 50px 8px rgba(74, 94, 68, 0.25),
+      inset 0 0 60px 15px rgba(74, 94, 68, 0.2),
+      0 30px 90px 20px rgba(113, 130, 106, 0.15);
+  }
+  100% {
+    opacity: 0.6;
+    transform: translateX(-50%) scale(1.03);
+    box-shadow:
+      0 0 80px 18px rgba(74, 94, 68, 0.55),
+      inset 0 0 100px 30px rgba(74, 94, 68, 0.4),
+      0 50px 150px 40px rgba(113, 130, 106, 0.35);
+  }
+}
+
+.doomsday-container {
+  position: relative;
+  z-index: 1;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* Disclaimer Banner */
+.doomsday-page .doomsday-top-disclaimer {
+  background: rgba(113, 130, 106, 0.15);
+  border: 1px solid rgba(113, 130, 106, 0.4);
   border-radius: var(--radius-lg);
   padding: 1.1rem 1.35rem;
   margin-bottom: 2rem;
   font-size: 0.88rem;
-  color: var(--text-secondary);
+  color: var(--doom-text-muted);
   line-height: 1.6;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
 }
 
-.doomsday-official-banner {
-  background: linear-gradient(90deg, rgba(201, 168, 76, 0.16) 0%, rgba(20, 20, 32, 0.7) 100%);
+.doomsday-page .doomsday-disclaimer-icon {
+  font-size: 1.15rem;
+  color: var(--doom-gold);
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+
+/* Header Section */
+.doomsday-page .doomsday-header-section {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  padding: 1rem 0 0.5rem;
+}
+
+.doomsday-page .doomsday-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--doom-gold);
+  margin-bottom: 0.5rem;
+}
+
+.doomsday-page .doomsday-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3.5rem, 9vw, 6.5rem);
+  letter-spacing: 0.08em;
+  line-height: 0.95;
+  color: #71826a;
+  text-shadow: 0 0 40px rgba(113, 130, 106, 0.6);
+  margin-bottom: 0.35rem;
+}
+
+.doomsday-page .doomsday-subtitle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--doom-gold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.85rem;
+}
+
+.doomsday-page .doomsday-tagline {
+  font-size: 0.95rem;
+  color: var(--doom-text);
+  max-width: 580px;
+  margin: 0 auto 1.5rem;
+  line-height: 1.6;
+}
+
+.doomsday-page .doomsday-header-separator {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--doom-gold) 50%, transparent 100%);
+  margin: 2.25rem 0 2.5rem;
+  opacity: 0.85;
+}
+
+/* Countdown Timer */
+.doomsday-page .doomsday-countdown-timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin: 1.5rem auto 0;
+}
+
+.doomsday-page .doomsday-timer-box {
+  background: var(--doom-green-dark);
+  border: 1px solid var(--doom-green-glow);
+  box-shadow: inset 0 0 15px rgba(74, 94, 68, 0.3);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1.25rem;
+  min-width: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.doomsday-page .doomsday-timer-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px;
+  line-height: 1;
+  color: var(--doom-gold-light);
+}
+
+.doomsday-page .doomsday-timer-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--doom-text-muted);
+  margin-top: 0.35rem;
+  font-weight: 600;
+}
+
+.doomsday-page .doomsday-timer-colon {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  color: var(--doom-green-glow);
+  user-select: none;
+}
+
+/* Section Banners and Headers */
+.doomsday-page .doomsday-official-banner {
+  background: linear-gradient(90deg, rgba(201, 168, 76, 0.22) 0%, rgba(45, 59, 42, 0.6) 100%);
   border: 1px solid rgba(201, 168, 76, 0.45);
   border-radius: var(--radius-md);
   padding: 0.85rem 1.25rem;
@@ -1718,59 +1898,156 @@ a:hover { color: var(--text-primary); }
   display: flex;
   align-items: center;
   gap: 0.65rem;
-  color: var(--accent-gold);
+  color: var(--doom-gold-light);
   font-weight: 600;
   font-size: 0.95rem;
 }
 
-.doomsday-header-official {
-  border-left: 4px solid var(--accent-gold) !important;
-  padding-left: 0.85rem;
-  font-size: 1.4rem;
-  color: #ffffff;
+.doomsday-page .doomsday-header-official {
+  background: linear-gradient(90deg, var(--doom-green-dark) 0%, transparent 100%);
+  border-left: 3px solid var(--doom-gold) !important;
+  color: var(--doom-gold) !important;
+  padding: 0.65rem 1rem;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.25rem;
 }
 
-.doomsday-header-recommended {
-  border-left: 4px solid #c0c0c0 !important;
+.doomsday-page .doomsday-header-recommended {
+  border-left: 3px solid var(--doom-green) !important;
+  color: var(--doom-green) !important;
   padding-left: 0.85rem;
-  font-size: 1.4rem;
-  color: #ffffff;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
 }
 
-.doomsday-header-optional {
-  border-left: 4px solid #6b7280 !important;
+.doomsday-page .doomsday-sub-recommended {
+  font-size: 0.84rem;
+  color: var(--doom-text-muted);
   padding-left: 0.85rem;
-  font-size: 1.4rem;
-  color: #ffffff;
+  margin-bottom: 1.25rem;
+  font-weight: 500;
 }
 
-.doomsday-rec-card {
+.doomsday-page .doomsday-header-optional {
+  border-left: 3px solid var(--doom-text-muted) !important;
+  color: var(--doom-text-muted) !important;
+  padding-left: 0.85rem;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.25rem;
+}
+
+/* Recommendation Cards */
+.doomsday-page .doomsday-rec-card {
   display: grid;
   grid-template-columns: 80px 1fr;
   gap: 1.25rem;
   align-items: stretch;
   padding: 1rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  background: rgba(45, 59, 42, 0.4);
+  border: 1px solid rgba(113, 130, 106, 0.3);
   border-radius: var(--radius-lg);
   width: 100%;
   box-sizing: border-box;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color 0.25s, box-shadow 0.25s;
   min-height: 140px;
 }
 
-.doomsday-rec-card:hover {
-  border-color: rgba(255, 255, 255, 0.22);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+.doomsday-page .doomsday-rec-card:hover {
+  border: 1px solid rgba(201, 168, 76, 0.6);
+  box-shadow: 0 0 20px rgba(201, 168, 76, 0.2), 0 8px 24px rgba(0, 0, 0, 0.6);
 }
 
-.doomsday-rec-poster-box {
+.doomsday-page .doomsday-rec-poster-box {
   width: 80px;
   height: 120px;
-  border-radius: 6px;
+  border-radius: 4px;
   overflow: hidden;
-  background: var(--bg-elevated);
+  background: var(--doom-green-dark);
   flex-shrink: 0;
+}
+
+.doomsday-page .doomsday-title-text {
+  color: var(--doom-text);
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  transition: color 0.2s;
+}
+
+.doomsday-page .doomsday-title-text:hover {
+  color: var(--doom-gold-light);
+}
+
+.doomsday-page .doomsday-year-text {
+  font-size: 0.8rem;
+  color: var(--doom-text-muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.doomsday-page .doomsday-reason-text {
+  font-size: 0.86rem;
+  color: var(--doom-text);
+  line-height: 1.55;
+  margin: 0.35rem 0 0.5rem 0;
+}
+
+.doomsday-page .doomsday-badge-official {
+  background: var(--doom-gold);
+  color: var(--doom-black);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.doomsday-page .doomsday-badge-editorial {
+  background: var(--doom-green);
+  color: var(--doom-black);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.doomsday-page .doomsday-details-link {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(45, 59, 42, 0.6);
+  border: 1px solid rgba(113, 130, 106, 0.4);
+  color: var(--doom-gold);
+  border-radius: var(--radius-md);
+  transition: all 0.2s;
+}
+
+.doomsday-page .doomsday-details-link:hover {
+  background: rgba(74, 94, 68, 0.8);
+  border-color: var(--doom-gold);
+  color: var(--doom-gold-light);
+}
+
+.doomsday-page .doomsday-sources-box {
+  margin-top: 2rem;
+  padding: 1rem 1.25rem;
+  background: rgba(45, 59, 42, 0.3);
+  border: 1px solid rgba(113, 130, 106, 0.3);
+  border-radius: var(--radius-md);
+  font-size: 0.78rem;
+  color: var(--doom-text-muted);
 }
 
 
